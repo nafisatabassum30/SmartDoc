@@ -1,0 +1,267 @@
+/* =========================================================
+   SmartDoc Admin Dashboard — Modern FinSet Theme
+   Frameworks: Bootstrap 5 + Lucide
+   Fonts: Inter + Poppins
+   ========================================================= */
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap');
+
+:root{
+  /* Core palette (FinSet cyan + lavender family) */
+  --sd-primary:#0ea5e9;          /* cyan-500 */
+  --sd-primary-deep:#0284c7;     /* cyan-700 */
+  --sd-dark:#0b2239;             /* rich navy text */
+  --sd-accent:#10b981;           /* emerald */
+  --sd-bg:#f8fafc;               /* page bg */
+
+  --lav-50:#eef2ff;              /* soft lavender */
+  --lav-100:#e9d5ff;
+  --lav-200:#d8b4fe;
+  --lav-300:#c084fc;
+
+  --navy:var(--sd-primary);
+  --navy-deep:var(--sd-primary-deep);
+  --navy-accent:#38bdf8;
+
+  --muted:#64748b;
+  --page-bg:var(--sd-bg);
+  --card-bg:#ffffff;
+
+  --shadow:0 6px 18px rgba(16,24,40,.06);
+  --shadow-strong:0 10px 24px rgba(16,24,40,.12);
+
+  --sidebar-w: 264px;
+}
+
+html,body{height:100%}
+body{
+  background:var(--page-bg);
+  color:var(--sd-dark);
+  font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+}
+
+/* -------------------- Top Bar -------------------- */
+.sd-topbar{
+  background: var(--navy);
+  color:#fff;
+  position:sticky; top:0; z-index:1030;
+  box-shadow:0 2px 8px rgba(0,0,0,.12);
+}
+
+/* BIG SmartDoc brand like Admin look */
+.sd-logo{
+  font-family:Poppins, Inter, sans-serif;
+  font-weight:900;
+  font-size:2rem;                 /* bigger */
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  color:#fff;
+  text-shadow:1px 1px 4px rgba(0,0,0,.25);
+  white-space:nowrap;
+}
+.sd-logo:hover{
+  color:#fff; opacity:.92;
+  transform:scale(1.03);
+  transition:all .25s ease;
+}
+
+/* -------------------- Sidebar -------------------- */
+.sd-sidebar{
+  position:fixed; top:56px; left:0; bottom:0;   /* assumes header height ~56-64 */
+  width:var(--sidebar-w);
+  background:#0d3a53;                           /* deep cyan/navy */
+  color:#dbeafe;
+  box-shadow: 2px 0 8px rgba(0,0,0,.08) inset;
+  overflow-y:auto;
+}
+.sd-sidebar .nav-link{
+  color:#dbeafe;
+  padding:.7rem 1rem;
+  border-radius:12px;
+  margin:.25rem .75rem;
+  display:flex; align-items:center; gap:.6rem;
+  font-weight:600;
+  transition:all .2s ease;
+}
+.sd-sidebar .nav-link .lucide{ width:18px; height:18px; }
+.sd-sidebar .nav-link:hover,
+.sd-sidebar .nav-link.active{
+  background:#ffffff;
+  color:#0b2239;
+  transform:translateX(2px);
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+}
+
+/* Content shifts right to make room for sidebar */
+.sd-content{
+  padding-top:16px; padding-bottom:24px;
+  margin-left:var(--sidebar-w);
+}
+@media (max-width:991px){
+  .sd-sidebar{ position:fixed; transform:translateX(-100%); transition:transform .25s ease; }
+  .sd-sidebar.open{ transform:translateX(0%); }
+  .sd-content{ margin-left:0; }
+}
+
+/* -------------------- Tabs -------------------- */
+.sd-tabs .nav-link{
+  color:#dce9ff;
+  padding:.7rem 1.4rem;
+  font-size:1.08rem;
+  font-weight:700;
+  border-radius:999px;
+  margin-right:.4rem;
+  transition:all .25s ease;
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0));
+  border:1px solid rgba(255,255,255,.15);
+}
+.sd-tabs .nav-link.active,
+.sd-tabs .nav-link:hover{
+  background:#ffffff;
+  color:var(--navy-deep);
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+}
+@media (max-width:575px){ .sd-tabs{ display:none; } }
+
+/* -------------------- KPI Tiles -------------------- */
+.sd-kpis{
+  display:grid;
+  gap:16px;
+  grid-template-columns:repeat(4, minmax(260px,1fr));
+  margin-bottom:.5rem;
+}
+@media (max-width:1199px){ .sd-kpis{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:575px) { .sd-kpis{ grid-template-columns:1fr; } }
+
+.sd-kpi{
+  display:flex; align-items:center; gap:18px;
+  border-radius:18px;
+  padding:24px 22px;
+  color:#0b2239;
+  text-decoration:none;
+  border:1px solid #dbeafe;
+  box-shadow:var(--shadow);
+  background: linear-gradient(135deg, rgba(14,165,233,.12), rgba(216,180,254,.18));
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.sd-kpi:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-strong);
+  background: linear-gradient(135deg, rgba(14,165,233,.2), rgba(216,180,254,.28));
+}
+.sd-kpi .icon-wrap{
+  width:54px; height:54px; border-radius:14px;
+  display:grid; place-items:center;
+  background:conic-gradient(from 180deg at 50% 50%, rgba(56,189,248,.25), rgba(192,132,252,.25), rgba(56,189,248,.25));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.35);
+}
+.sd-kpi .emoji{ font-size:26px; line-height:1; }
+.sd-kpi .text-wrap{ line-height:1.15 }
+.sd-kpi .label{ font-weight:700; opacity:.95; }
+.sd-kpi .value{ font-weight:900; font-size:1.7rem; letter-spacing:.2px; }
+.sd-kpi .delta{ font-size:.9rem; opacity:.95; display:flex; align-items:center; gap:.35rem }
+.sd-kpi .lucide{ width:16px; height:16px; }
+
+/* -------------------- Cards, Tables, Forms -------------------- */
+.card{
+  border:0; border-radius:16px;
+  background:var(--card-bg);
+  box-shadow:var(--shadow);
+}
+.card.glassy{
+  background:linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.92));
+  backdrop-filter: blur(3px);
+  border:1px solid #eef2ff;
+}
+
+.card .card-title{ margin-bottom:.25rem; }
+.section-title{ font-weight:800; color:#162941; letter-spacing:.2px; }
+
+.subtle{ color:var(--muted); }
+
+.table{ --bs-table-bg:#fff; }
+.table thead th{
+  background:#f6f9fc; color:#334155; font-weight:800;
+  border-bottom:1px solid #e8edf4;
+}
+.table tbody td{ vertical-align:middle; }
+.table .actions .btn{ margin:0 .25rem; }
+
+.form-control, .form-select{
+  border-radius:12px; border:1px solid #e1e8f1; background:#fff;
+}
+.form-control:focus, .form-select:focus{
+  border-color:#7dd3fc; box-shadow:0 0 0 .2rem rgba(14,165,233,.15);
+}
+
+.modal-content{
+  border:0; border-radius:18px; box-shadow:var(--shadow);
+}
+
+/* -------------------- Buttons -------------------- */
+.btn-primary{
+  --bs-btn-bg:var(--sd-primary);
+  --bs-btn-border-color:var(--sd-primary);
+  --bs-btn-hover-bg:var(--sd-primary-deep);
+  --bs-btn-hover-border-color:var(--sd-primary-deep);
+}
+.btn-outline-secondary{
+  border-color:#e1e7f0;
+}
+.btn-outline-danger{
+  --bs-btn-hover-bg:#fee2e2;
+  --bs-btn-hover-border-color:#fecaca;
+  --bs-btn-hover-color:#991b1b;
+}
+
+/* -------------------- Scrollbars -------------------- */
+*{ scrollbar-width:thin; scrollbar-color:#c8d3e3 transparent; }
+*::-webkit-scrollbar{ height:10px; width:10px }
+*::-webkit-scrollbar-thumb{ background:#c8d3e3; border-radius:10px }
+
+/* -------------------- Dashboard Cards -------------------- */
+.navbar .nav-link.active{
+  color:var(--sd-primary-deep);
+}
+.navbar .nav-link.active:hover{
+  color:var(--sd-primary-deep);
+}
+
+.stat-card{
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  transition:transform .3s, box-shadow .3s;
+}
+.stat-card:hover,
+.stat-card-link:hover .stat-card{
+  transform:translateY(-5px);
+  box-shadow:0 10px 30px rgba(102,126,234,.3);
+}
+.stat-card.alt1{ background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.stat-card.alt2{ background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.stat-card.alt3{ background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+.stat-card.alt4{ background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+.stat-card.alt5{ background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); color:#333; }
+.stat-card.alt6{ background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color:#333; }
+.stat-card.alt7{ background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%); }
+.stat-card.alt8{ background: linear-gradient(135deg, #2e2e78 0%, #662d8c 100%); }
+.stat-card .stat-icon{ font-size:2rem; opacity:.8; margin-bottom:10px; }
+.stat-card .stat-value{ font-size:2.5rem; font-weight:700; margin-bottom:5px; }
+.stat-card .stat-label{ font-size:.95rem; opacity:.9; }
+
+/* Stat card links - make them clickable while preserving styling */
+.stat-card-link{
+  text-decoration:none;
+  color:inherit;
+  display:block;
+  cursor:pointer;
+}
+.stat-card-link:hover{
+  text-decoration:none;
+  color:inherit;
+}

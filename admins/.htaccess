@@ -1,0 +1,6 @@
+# Redirect directory access to index.php
+DirectoryIndex index.php
+
+# Prevent directory listing
+Options -Indexes
+

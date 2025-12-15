@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>SmartDoc — Find the Right Doctor, Fast</title>
+
+  <meta name="description" content="SmartDoc helps patients in Bangladesh select symptoms, get a likely specialty, and book the right doctor nearby." />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+
+    :root{--sd-primary:#0ea5e9;--sd-dark:#0b2239;--sd-accent:#10b981;--sd-bg:#f8fafc}
+
+    html,body{font-family:Inter, system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans"; color:#0b2239}
+
+    .btn-primary{--bs-btn-bg:var(--sd-primary);--bs-btn-border-color:var(--sd-primary);--bs-btn-hover-bg:#0284c7;--bs-btn-hover-border-color:#0284c7}
+
+    .btn-accent{background:var(--sd-accent); color:#fff}
+
+    .hero{background:linear-gradient(180deg,rgba(14,165,233,.10),rgba(14,165,233,0) 60%),var(--sd-bg)}
+
+    .feature-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:12px;background:#e0f2fe;color:#0369a1}
+
+    .card{border:1px solid #e5e7eb}
+
+    .section-label{letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:#64748b}
+
+    .badge-soft{background:#ecfeff;color:#0369a1;border:1px solid #bae6fd}
+
+  /* Chatbot Button (REPLACE THIS BLOCK) */
+
+.chatbot-toggle{
+
+  position:fixed;
+
+  bottom:24px;
+
+  right:24px;
+
+  width:70px;          /* bigger */
+
+  height:70px;         /* bigger */
+
+  border-radius:50%;
+
+  border:none;
+
+  background:var(--sd-primary);
+
+  color:#fff;
+
+  font-size:2rem;      /* bigger icon */
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  z-index:1050;
+
+  cursor:pointer;
+
+  animation: floatUpDown 2s infinite ease-in-out;
+
+}
+
+/* Floating “Chat here” label */
+
+.chatbot-label{
+
+  position:fixed;
+
+  bottom:105px;
+
+  right:28px;
+
+  background:#0ea5e9;
+
+  color:#fff;
+
+  padding:6px 14px;
+
+  border-radius:20px;
+
+  font-size:0.85rem;
+
+  box-shadow:0 4px 14px rgba(14,165,233,0.35);
+
+  animation: floatUpDown 2s infinite ease-in-out;
+
+  z-index:1050;
+
+}
+
+/* Floating animation */
+
+@keyframes floatUpDown {
+
+  0% { transform: translateY(0px); }
+
+  50% { transform: translateY(-6px); }
+
+  100% { transform: translateY(0px); }
+
+}
+
+    .chatbot-toggle:hover{
+
+      transform:scale(1.1);
+
+      box-shadow:0 6px 16px rgba(14,165,233,.5), 0 12px 32px rgba(14,165,233,.3);
+
+    }
+
+    .chatbot-panel{
+
+      position:fixed;
+
+      bottom:112px;          /* slightly higher to fit larger panel */
+
+      right:32px;
+
+      width:400px;           /* wider */
+
+      max-width:95vw;
+
+      max-height:620px;      /* taller */
+
+      background:#fff;
+
+      border-radius:22px;
+
+      box-shadow:0 24px 50px rgba(15,23,42,.22);
+
+      border:1px solid #e2e8f0;
+
+      display:none;
+
+      flex-direction:column;
+
+      z-index:1050;
+
+      overflow:hidden;
+
+    }
+
+    .chatbot-panel.active{
+
+      display:flex;
+
+      animation:slideUp 0.3s ease;
+
+    }
+
+    @keyframes slideUp {
+
+      from {opacity:0; transform:translateY(20px);}
+
+      to {opacity:1; transform:translateY(0);}
+
+    }
+
+    .chatbot-header{
+
+      padding:16px;
+
+      border-bottom:1px solid #e2e8f0;
+
+      display:flex;
+
+      justify-content:space-between;
+
+      align-items:center;
+
+      background:#f8fafc;
+
+    }
+
+    .chatbot-messages{
+
+      padding:18px;
+
+      max-height:440px;
+
+      overflow-y:auto;
+
+      display:flex;
+
+      flex-direction:column;
+
+      gap:12px;
+
+      background:#f8fafc;
+
+      flex:1;
+
+    }
+
+    .chat-msg{
+
+      padding:12px 14px;
+
+      border-radius:16px;
+
+      font-size:0.95rem;
+
+      line-height:1.4;
+
+      max-width:85%;
+
+      word-wrap:break-word;
+
+    }
+
+    .chat-msg.bot{
+
+      background:#e0f2fe;
+
+      color:#0b2239;
+
+      align-self:flex-start;
+
+    }
+
+    .chat-msg.user{
+
+      background:#0ea5e9;
+
+      color:#fff;
+
+      align-self:flex-end;
+
+    }
+
+    .chatbot-input{
+
+      border-top:1px solid #e2e8f0;
+
+      padding:10px;
+
+      display:flex;
+
+      gap:8px;
+
+      background:#fff;
+
+    }
+
+    .chatbot-input input{
+
+      flex:1;
+
+      border:1px solid #cbd5f5;
+
+      border-radius:999px;
+
+      padding:8px 14px;
+
+      font-size:.9rem;
+
+      outline:none;
+
+    }
+
+    .chatbot-input input:focus{
+
+      border-color:var(--sd-primary);
+
+      box-shadow:0 0 0 3px rgba(14,165,233,.1);
+
+    }
+
+    .chatbot-input button{
+
+      border:none;
+
+      background:var(--sd-primary);
+
+      color:#fff;
+
+      padding:0 18px;
+
+      border-radius:999px;
+
+      cursor:pointer;
+
+      transition:background 0.2s;
+
+    }
+
+    .chatbot-input button:hover{
+
+      background:#0284c7;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+
+    <div class="container py-2">
+
+      <a class="navbar-brand d-flex align-items-center" href="#">
+
+        <svg width="28" height="28" viewBox="0 0 24 24" class="me-2">
+
+          <path d="M12 2l3.5 3.5-3.5 3.5L8.5 5.5 12 2Zm0 7l7 7-3 3-4-4-4 4-3-3 7-7Z" fill="#0ea5e9"/>
+
+        </svg>
+
+        <strong>SmartDoc</strong>
+
+      </a>
+
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+
+        <span class="navbar-toggler-icon"></span>
+
+      </button>
+
+      <div class="collapse navbar-collapse" id="nav">
+
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+
+          <li class="nav-item"><a class="nav-link" href="#specialties">Specialties</a></li>
+
+          <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+
+          <!-- UPDATED PATHS -->
+          <li class="nav-item ms-lg-3">
+
+            <a class="btn btn-sm btn-outline-secondary" href="/SmartDoc/patients/login.php">Sign in</a>
+
+          </li>
+
+          <li class="nav-item ms-2">
+
+            <a class="btn btn-sm btn-primary" href="/SmartDoc/patients/register.php">Create account</a>
+
+          </li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+  </nav>
+
+  <header class="hero">
+
+    <div class="container py-5 py-lg-6">
+
+      <div class="row align-items-center g-4">
+
+        <div class="col-lg-6">
+
+          <span class="badge badge-soft mb-3">Bangladesh-focused</span>
+
+          <h1 class="display-5 fw-bold">Find the <span class="text-primary">right specialist</span> for your symptoms</h1>
+
+          <p class="lead text-secondary mt-3">
+
+            Select your symptoms, SmartDoc will suggest the likely specialty and verified doctors nearby.
+
+          </p>
+
+          <ul class="text-secondary mb-4">
+
+            <li>Symptom → Specialty guidance</li>
+
+            <li>Search by location & consultation type</li>
+
+            <li>Over 1000 verified Doctors information</li>
+
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <section id="specialties" class="py-5" style="background:var(--sd-bg)">
+
+    <div class="container">
+
+      <div class="d-flex justify-content-between align-items-end mb-3">
+
+        <p class="section-label mb-2">Browse</p>
+
+        <a class="btn btn-outline-secondary btn-sm" href="/SmartDoc/patients/specializations.php">See all</a>
+
+      </div>
+
+      <div class="row g-3 g-md-4">
+
+        <div class="col-6 col-md-3">
+
+          <a class="card h-100" href="/SmartDoc/patients/browse-doctors.php?specialization=Cardiologist">
+
+            <div class="card-body">
+
+              <div class="feature-icon mb-2"><i class="bi bi-heart-pulse"></i></div>
+
+              <div class="fw-semibold">Cardiologist</div>
+
+              <div class="small text-secondary">Heart & blood vessels</div>
+
+            </div>
+
+          </a>
+
+        </div>
+
+        <div class="col-6 col-md-3">
+
+          <a class="card h-100" href="/SmartDoc/patients/browse-doctors.php?specialization=Otolaryngologist">
+
+            <div class="card-body">
+
+              <div class="feature-icon mb-2"><i class="bi bi-ear"></i></div>
+
+              <div class="fw-semibold">Otolaryngologist</div>
+
+              <div class="small text-secondary">Ear, nose & throat (ENT)</div>
+
+            </div>
+
+          </a>
+
+        </div>
+
+        <div class="col-6 col-md-3">
+
+          <a class="card h-100" href="/SmartDoc/patients/browse-doctors.php?specialization=Dermatologist">
+
+            <div class="card-body">
+
+              <div class="feature-icon mb-2"><i class="bi bi-droplet"></i></div>
+
+              <div class="fw-semibold">Dermatologist</div>
+
+              <div class="small text-secondary">Skin, hair & nails</div>
+
+            </div>
+
+          </a>
+
+        </div>
+
+        <div class="col-6 col-md-3">
+
+          <a class="card h-100" href="/SmartDoc/patients/browse-doctors.php?specialization=Neurologist">
+
+            <div class="card-body">
+
+              <div class="feature-icon mb-2"><i class="bi bi-cpu"></i></div>
+
+              <div class="fw-semibold">Neurologist</div>
+
+              <div class="small text-secondary">Brain & nerves</div>
+
+            </div>
+
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="py-5" style="background:var(--sd-bg)">
+
+    <div class="container">
+
+      <h2 class="h3 fw-semibold mb-3">Why SmartDoc?</h2>
+
+      <ul class="list-unstyled text-secondary mb-4">
+
+        <li class="mb-2">• Reduces trial-and-error by guiding you to the right specialty</li>
+
+        <li class="mb-2">• Curates doctors with clear credentials, experience & fees</li>
+
+      </ul>
+
+      <a class="btn btn-accent" href="/SmartDoc/patients/symptom-checker.php">Start symptom check</a>
+
+    </div>
+
+  </section>
+
+  <section id="faq" class="py-5 bg-white">
+
+    <div class="container">
+
+      <p class="section-label mb-2">Help</p>
+
+      <h2 class="h3 fw-semibold mb-4">Frequently asked questions</h2>
+
+      <div class="accordion" id="faqAcc">
+
+        <div class="accordion-item">
+
+          <h2 class="accordion-header" id="q1">
+
+            <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#a1">
+
+              Is SmartDoc a replacement for doctors?
+
+            </button>
+
+          </h2>
+
+          <div id="a1" class="accordion-collapse collapse show">
+
+            <div class="accordion-body">
+
+              No. SmartDoc provides guidance to help you find the right specialist faster.
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="accordion-item">
+
+          <h2 class="accordion-header" id="q3">
+
+            <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#a3">
+
+              Can I book a doctor online?
+
+            </button>
+
+          </h2>
+
+          <div id="a3" class="accordion-collapse collapse">
+
+            <div class="accordion-body">
+
+              No, SmartDoc does not allow appointment booking. It recommends suitable doctors.
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer class="footer border-top py-4">
+
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+
+      <div class="small text-secondary">© <span id="year"></span> SmartDoc • Made for Bangladesh</div>
+
+    </div>
+
+  </footer>
+
+<!--ChatBot-->
+
+<!-- Floating label -->
+
+<div class="chatbot-label">Chat here</div>
+
+<button class="chatbot-toggle" id="chatbotToggle" aria-label="Chat with SmartDoc guide">
+
+  <i class="bi bi-chat-dots"></i>
+
+</button>
+
+<div class="chatbot-panel" id="chatbotPanel" aria-live="polite">
+
+  <div class="chatbot-header">
+
+    <div>
+
+      <div class="fw-semibold">SmartDoc Guide</div>
+
+      <small class="text-secondary">Quick help before you sign up</small>
+
+    </div>
+
+    <button class="btn btn-sm btn-outline-secondary" id="chatbotClose" aria-label="Close chatbot">&times;</button>
+
+  </div>
+
+  <div class="chatbot-messages" id="chatbotMessages"></div>
+
+  <form class="chatbot-input" id="chatbotForm">
+
+    <input type="text" id="chatbotInput" placeholder="Ask something brief..." autocomplete="off">
+
+    <button type="submit">Send</button>
+
+  </form>
+
+</div>
+
+<!-- Role Selection Modal -->
+
+<div class="modal fade" id="roleModal" tabindex="-1">
+
+  <div class="modal-dialog modal-dialog-centered">
+
+    <div class="modal-content">
+
+      <div class="modal-header border-0">
+
+        <h5 class="modal-title">Select your role</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <button class="btn btn-primary w-100 mb-3" id="chooseAdmin">Admin</button>
+
+        <button class="btn btn-outline-primary w-100" id="choosePatient">Patient</button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Role selection functionality
+
+  let pendingAction = null;
+
+  const signinBtn = document.getElementById('signinRoleBtn');
+
+  const createBtn = document.getElementById('createRoleBtn');
+
+  const chooseAdmin = document.getElementById('chooseAdmin');
+
+  const choosePatient = document.getElementById('choosePatient');
+
+  const roleModalEl = document.getElementById('roleModal');
+
+  
+
+  // Initialize Bootstrap Modal only if element exists
+
+  let roleModal = null;
+
+  if (roleModalEl) {
+
+    roleModal = new bootstrap.Modal(roleModalEl);
+
+  }
+
+  // Add event listeners only if elements exist
+
+  if (signinBtn) {
+
+    signinBtn.addEventListener('click', () => {
+
+      pendingAction = 'signin';
+
+      if (roleModal) roleModal.show();
+
+    });
+
+  }
+
+  if (createBtn) {
+
+    createBtn.addEventListener('click', () => {
+
+      pendingAction = 'create';
+
+      if (roleModal) roleModal.show();
+
+    });
+
+  }
+
+  if (chooseAdmin) {
+
+    chooseAdmin.addEventListener('click', () => {
+
+      window.location.href = "/SmartDoc/admins/login.php";
+
+    });
+
+  }
+
+  if (choosePatient) {
+
+    choosePatient.addEventListener('click', () => {
+
+      if (pendingAction === 'signin')
+
+          window.location.href = "/SmartDoc/patients/login.php";
+
+      else
+
+          window.location.href = "/SmartDoc/patients/register.php";
+
+    });
+
+  }
+
+  // Chatbot functionality
+
+  const chatbotToggle = document.getElementById('chatbotToggle');
+
+  const chatbotPanel  = document.getElementById('chatbotPanel');
+
+  const chatbotClose  = document.getElementById('chatbotClose');
+
+  const chatbotMessages = document.getElementById('chatbotMessages');
+
+  const chatbotForm   = document.getElementById('chatbotForm');
+
+  const chatbotInput  = document.getElementById('chatbotInput');
+
+  const appendMessage = (text, sender = 'bot') => {
+
+    const bubble = document.createElement('div');
+
+    bubble.className = `chat-msg ${sender}`;
+
+    bubble.textContent = text;
+
+    chatbotMessages.appendChild(bubble);
+
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+  };
+
+  const specialistInfo = {
+
+    "oncologist": "An Oncologist diagnoses and treats cancers and tumors. We have oncologists available on SmartDoc — browse to view doctors.",
+
+    "cardiologist": "A Cardiologist treats heart and blood vessel diseases. Browse SmartDoc to view cardiologists.",
+
+    "neurologist": "A Neurologist treats brain, nerve, and migraine disorders. You can browse neurologists on SmartDoc.",
+
+    "dermatologist": "A Dermatologist treats skin, hair, and nail issues. Browse dermatologists on SmartDoc.",
+
+    "gynecologist": "A Gynecologist handles reproductive and pregnancy issues. Browse gynecologists on SmartDoc.",
+
+    "gynaecologist": "A Gynaecologist handles reproductive and pregnancy issues. Browse gynaecologists on SmartDoc.",
+
+    "endocrinologist": "An Endocrinologist treats hormone and thyroid disorders. SmartDoc lists endocrinologists.",
+
+    "orthopedic": "An Orthopedic Surgeon treats bones, joints, and spine issues. Browse orthopedic specialists on SmartDoc.",
+
+    "orthopaedic": "An Orthopaedic Surgeon treats bones, joints, and spine issues. Browse orthopedic specialists on SmartDoc.",
+
+    "hepatologist": "A Hepatologist treats liver-related diseases. Browse hepatologists on SmartDoc.",
+
+    "urologist": "A Urologist treats urinary and male reproductive issues. Browse urologists on SmartDoc.",
+
+    "psychiatrist": "A Psychiatrist treats mental health disorders. Browse psychiatrists on SmartDoc.",
+
+    "gastroenterologist": "A Gastroenterologist treats digestive system issues. Browse gastroenterologists on SmartDoc.",
+
+    "nephrologist": "A Nephrologist treats kidney diseases. Browse nephrologists on SmartDoc.",
+
+    "pulmonologist": "A Pulmonologist treats lung and breathing problems. Browse pulmonologists on SmartDoc.",
+
+    "ophthalmologist": "An Ophthalmologist treats eye and vision issues. Browse ophthalmologists on SmartDoc.",
+
+    "dentist": "A Dentist treats teeth, gum, and oral problems. Browse dentists on SmartDoc.",
+
+    "pediatrician": "A Pediatrician treats children’s health issues. Browse pediatricians on SmartDoc.",
+
+    "general physician": "A General Physician treats common illnesses and infections. Browse physicians on SmartDoc.",
+
+    "rheumatologist": "A Rheumatologist treats autoimmune and joint problems. Browse rheumatologists on SmartDoc.",
+
+    "diabetologist": "A Diabetologist treats diabetes and blood sugar issues. Browse diabetologists on SmartDoc.",
+
+    "allergist": "An Allergist/Immunologist treats allergies and immune disorders. Browse allergy specialists on SmartDoc.",
+
+    "immunologist": "An Allergist/Immunologist treats allergies and immune disorders. Browse allergy specialists on SmartDoc.",
+
+    "plastic surgeon": "A Plastic Surgeon performs reconstructive and cosmetic surgeries. Browse plastic surgeons on SmartDoc.",
+
+    "radiologist": "A Radiologist interprets X-rays, MRI, CT scans. Browse radiologists on SmartDoc.",
+
+    "infectious disease": "An Infectious Disease Specialist treats complex infections. Browse ID specialists on SmartDoc."
+
+  };
+
+  const botReplies = [
+
+    {keywords:['hi','hello','hey'], text:'Hi! I\'m the SmartDoc guide. Tell me what you’re facing, and I’ll help.'},
+
+    {keywords:['problem','issue','symptom','feel'], text:'Thanks for sharing. For full analysis, please sign up and use our symptom checker.'},
+
+    {keywords:['sign','register','account'], text:'Tap "Create account" at the top-right to begin.'},
+
+    {keywords:['login','log in','sign in'], text:'Use the "Sign in" button at the top-right to log into your account.'},
+
+    {keywords:['navigate','where','how','help'], text:'Use the top navigation: "How it works", "Specialties", or "Suggest specialty".'},
+
+    {keywords:['thank','thanks','ok'], text:'Glad to help! Ask me anything else.'},
+
+  ];
+
+  const chatbotAnswer = (rawText) => {
+
+    const text = rawText.toLowerCase();
+
+    for (const key in specialistInfo) {
+
+      if (text.includes(key)) {
+
+        return specialistInfo[key];
+
+      }
+
+    }
+
+    const matched = botReplies.find(item =>
+
+      item.keywords.some(keyword => text.includes(keyword))
+
+    );
+
+    return matched
+
+      ? matched.text
+
+      : 'For detailed guidance, please sign up or log in so SmartDoc can assist you properly.';
+
+  };
+
+  const toggleChat = () => {
+
+    chatbotPanel.classList.toggle('active');
+
+    if (chatbotPanel.classList.contains('active')) {
+
+      chatbotInput.focus();
+
+    }
+
+  };
+
+  chatbotToggle.addEventListener('click', toggleChat);
+
+  chatbotClose.addEventListener('click', () => chatbotPanel.classList.remove('active'));
+
+  if (chatbotToggle) {
+
+    chatbotToggle.addEventListener('click', toggleChat);
+
+  }
+
+  
+
+  if (chatbotClose) {
+
+    chatbotClose.addEventListener('click', () => chatbotPanel.classList.remove('active'));
+
+  }
+
+  if (chatbotForm) {
+
+    chatbotForm.addEventListener('submit', (e) => {
+
+      e.preventDefault();
+
+      const message = chatbotInput.value.trim();
+
+      if (!message) return;
+
+      appendMessage(message, 'user');
+
+      chatbotInput.value = '';
+
+      setTimeout(() => appendMessage(chatbotAnswer(message)), 350);
+
+    });
+
+  }
+
+  if (chatbotMessages) {
+
+    appendMessage('Hi! I\'m here for quick questions. Tell me a symptom or doctor type you\'re looking for!');
+
+  }
+
+});
+
+</script>
+
+</body>
+
+</html>

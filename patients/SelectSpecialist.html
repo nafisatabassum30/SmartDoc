@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Select Specialist</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --sd-primary: #0ea5e9;
+      --sd-bg: #f8fafc;
+    }
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--sd-bg);
+      color: #0b2239;
+    }
+
+    /* ✅ Gradient header (matches landing & patient pages) */
+    .hero-gradient {
+      background: linear-gradient(180deg, rgba(14,165,233,0.35), rgba(14,165,233,0.05) 70%), var(--sd-bg);
+      padding-top: 2rem;
+      padding-bottom: 1.5rem;
+    }
+
+    .kpi-card {
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: none;
+      border-radius: 12px;
+    }
+    .kpi-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ✅ NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top" aria-label="Primary">
+  <div class="container py-2">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="me-2">
+        <path d="M12 2l3.5 3.5-3.5 3.5L8.5 5.5 12 2Zm0 7l7 7-3 3-4-4-4 4-3-3 7-7Z" fill="#0ea5e9"/>
+      </svg>
+      <strong>SmartDoc</strong>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ✅ Gradient header area -->
+<div class="hero-gradient text-center">
+  <div class="container">
+    <h2 class="fw-semibold mb-3">Select Your Symptoms</h2>
+    <p class="text-muted mb-0">Choose your symptoms to find the right specialist</p>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+<!-- Main Content -->
+ <div class="container my-5">
+  <div class="card shadow-sm border-0 p-4">
+    <h4 class="mb-4 text-center text-primary">
+    </h4>
+
+    <!-- ✅ Symptoms Section -->
+<div class="mb-4">
+    <h6 class="fw-semibold mb-3 text-secondary">Select symptoms from here</h6>
+  <div class="d-flex flex-wrap gap-2">
+    <button type="button" class="btn btn-outline-primary symptom-btn">Fever</button>
+    <button type="button" class="btn btn-outline-primary symptom-btn">Cough</button>
+    <button type="button" class="btn btn-outline-primary symptom-btn">Fatigue</button>
+    <button type="button" class="btn btn-outline-primary symptom-btn">Headache</button>
+    <button type="button" class="btn btn-outline-primary symptom-btn">Body Ache</button>
+    <button type="button" class="btn btn-outline-primary symptom-btn">Nausea</button>
+    <button type="button" class="btn btn-outline-primary symptom-btn">Itchy Rash</button>
+    <button type="button" class="btn btn-outline-primary symptom-btn">Diarrhea</button>
+    <button type="button" class="btn btn-outline-primary symptom-btn">Rash</button>
+    <button type="button" class="btn btn-outline-primary symptom-btn">Vomiting</button>
+    <button type="button" class="btn btn-outline-primary symptom-btn">Dizziness</button>
+    <button type="button" class="btn btn-outline-primary symptom-btn">Joint Pain</button>
+  </div>
+</div>
+
+
+
+
+    <!-- ✅ Affected Area Section -->
+    <div class="mb-4">
+      <h6 class="fw-semibold mb-3 text-secondary">Select affected area</h6>
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-info area-btn">Head</button>
+        <button class="btn btn-outline-info area-btn">Chest</button>
+        <button class="btn btn-outline-info area-btn">Abdomen</button>
+        <button class="btn btn-outline-info area-btn">Back</button>
+        <button class="btn btn-outline-info area-btn">Leg</button>
+        <button class="btn btn-outline-info area-btn">Eyes</button>
+      </div>
+    </div>
+
+    <!-- ✅ Intensity Section -->
+    <div class="mb-4">
+      <h6 class="fw-semibold mb-3 text-secondary">Select intensity</h6>
+      <div class="d-flex gap-3">
+        <button class="btn btn-outline-danger intensity-btn">Mild</button>
+        <button class="btn btn-outline-danger intensity-btn">Severe</button>
+      </div>
+    </div>
+
+    <!-- ✅ Submit Button -->
+    <div class="text-center mt-4">
+      <button class="btn btn-outline-info px-4 py-2">
+        <i class="bi bi-cpu me-2 text-dark"></i>Generate Specialist Suggestion
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ CSS -->
+<style>
+  .symptom-btn.active,
+  .area-btn.active,
+  .intensity-btn.active {
+    background-color: #0ea5e9 !important;
+    color: #fff !important;
+    border-color: #0ea5e9 !important;
+  }
+
+  button.btn {
+    transition: all 0.2s ease-in-out;
+  }
+  button.btn:hover {
+    transform: translateY(-2px);
+  }
+</style>
+
+<!-- ✅ JS to toggle active buttons -->
+<script>
+  document.querySelectorAll('.symptom-btn, .area-btn, .intensity-btn').forEach(btn => {
+    btn.addEventListener('click', () => btn.classList.toggle('active'));
+  });
+</script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
